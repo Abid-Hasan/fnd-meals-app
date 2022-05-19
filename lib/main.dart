@@ -1,8 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:meals_app/screens/category_meals_screen.dart';
 
-import './categories_screen.dart';
+import 'screens/categories_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,11 +27,18 @@ class MyApp extends StatelessWidget {
               ),
               headline6: TextStyle(
                   fontFamily: 'RobotoCondensed',
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800),
             ),
       ),
-      home: CategoriesScreen(),
+      // home: CategoriesScreen(), (not needed anymore; "/" route is declared)
+
+      routes: {
+        "/": (context) => CategoriesScreen(),
+        CategoryMealsScreen.routeName: (context) => CategoryMealsScreen(),
+      },
+
+      initialRoute: "/", // not necessary for "/" because this is the default
     );
   }
 }
