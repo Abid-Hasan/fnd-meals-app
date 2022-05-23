@@ -20,7 +20,7 @@ class MealDetailScreen extends StatelessWidget {
 
   Widget _buildSectionContainer({Widget child}) {
     return Container(
-      height: 150,
+      height: 200,
       width: 300,
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(10),
@@ -31,7 +31,14 @@ class MealDetailScreen extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: child,
+      child: Scrollbar(
+        isAlwaysShown: true,
+        thickness: 8,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: child,
+        ),
+      ),
     );
   }
 
