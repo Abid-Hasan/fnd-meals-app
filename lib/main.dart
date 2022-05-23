@@ -18,14 +18,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoriteMeals = [];
   Map<String, bool> _filters = {
     'glutenFree': false,
     'lactoseFree': false,
     'vegetarian': false,
     'vegan': false,
   };
-
-  List<Meal> _availableMeals = DUMMY_MEALS;
 
   void _setFilters(Map<String, bool> newFilters) {
     setState(() {
@@ -40,13 +40,32 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _toggleFavorite(String mealId) {
+    int existingIndex = _favoriteMeals.indexWhere((meal) => meal.id == mealId);
+    if (existingIndex == -1) // if not found, then add
+    {
+      setState(() {
+        Meal currentMeal = DUMMY_MEALS.firstWhere((meal) => meal.id == mealId);
+        _favoriteMeals.add(currentMeal);
+      });
+    } else {
+      setState(() {
+        _favoriteMeals.removeAt(existingIndex);
+      });
+    }
+  }
+
+  bool _isFavorite(String mealId) {
+    return _favoriteMeals.any((element) => element.id == mealId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Meals',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+        primarySwatch: Colors.indigo,
         accentColor: Colors.amber,
         canvasColor: Color.fromRGBO(255, 254, 229, 1),
         fontFamily: 'Raleway',
@@ -65,10 +84,11 @@ class _MyAppState extends State<MyApp> {
       ),
 
       routes: {
-        "/": (context) => TabsScreen(),
+        "/": (context) => TabsScreen(_favoriteMeals),
         CategoryMealsScreen.routeName: (context) =>
             CategoryMealsScreen(_availableMeals),
-        MealDetailScreen.routeName: (context) => MealDetailScreen(),
+        MealDetailScreen.routeName: (context) =>
+            MealDetailScreen(_toggleFavorite, _isFavorite),
         FiltersScreen.routeName: (context) =>
             FiltersScreen(_filters, _setFilters),
       },
